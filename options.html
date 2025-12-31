@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Autodarts Hook — Options</title>
+  <style>
+    /* subtle modern styling (minimal) */
+    :root { --panel-bg: #ffffff; --muted: #6b7280; --accent: #2563eb; }
+    html,body { height:100%; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; margin: 20px; background:#f8fafc; color:#0f172a; }
+    .wrapper { max-width:980px; margin:0 auto; }
+  h1 { font-size: 1.25rem; margin-bottom: 0.75rem; text-align:center; }
+    label { display: block; margin: 8px 0; }
+    /* small helpers to reduce inline styles */
+    fieldset.panel { margin-top:12px; border:1px solid #e6eef8; padding:12px; border-radius:8px; background:var(--panel-bg); box-shadow:0 1px 0 rgba(2,6,23,0.04); }
+    legend.panel-legend { display:flex; align-items:center; gap:8px; font-weight:600; }
+    .legend-title { flex:1; }
+    .help-btn { border:0; background:#eef2ff; color:var(--accent); width:26px; height:26px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:600; cursor:pointer; }
+    .help-btn[aria-expanded="true"] { background:#dbeafe; }
+    .help-text { margin-top:8px; font-size:0.9rem; color:var(--muted); background:#fbfdff; padding:8px; border-radius:6px; border:1px solid #eef2f9; }
+    .help-text[hidden] { display:none; }
+    .label-block { display:block; margin:8px 0; }
+    .small-label { display:block; margin:6px 0; }
+    .full-width { display:block; width:100%; margin-top:6px; }
+    #status { color: green; margin-top: 12px; min-height: 1.2em; }
+
+    /* Publishers side-by-side on larger screens */
+    .publishers { display:grid; grid-template-columns:1fr; gap:12px; }
+    @media (min-width:760px) { .publishers { grid-template-columns:1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Autodarts Hook — Options</h1>
+  <div class="wrapper">
+  <form id="options-form">
+    <fieldset class="panel">
+      <legend class="panel-legend"><span class="legend-title">Main hook</span> <button class="help-btn" type="button" aria-expanded="false" aria-controls="help-main" title="What is this?">?</button></legend>
+      <div id="help-main" class="help-text" hidden>Enable or disable the message hooks that capture Autodarts messages. Use when wiring custom publishing or debugging.</div>
+      <label class="label-block">
+        <input type="checkbox" id="listenIncoming">
+        Listen incoming autodarts messages
+      </label>
+      <label class="label-block">
+        <input type="checkbox" id="listenOutgoing">
+        Listen outgoing autodarts messages
+      </label>
+    </fieldset>
+    <div class="publishers">
+    <fieldset class="panel">
+      <legend class="panel-legend"><span class="legend-title">WebSocket publishing</span> <button class="help-btn" type="button" aria-expanded="false" aria-controls="help-websocket" title="What is this?">?</button></legend>
+      <div id="help-websocket" class="help-text" hidden>Forward captured events to a WebSocket server. Enter a ws:// URL and pick which messages to publish.</div>
+      <label class="label-block">
+        <input type="checkbox" id="websocketEnabled"> Enable WebSocket publishing
+      </label>
+      <label class="label-block">
+        Server URL
+        <input type="text" id="websocketUrl" class="full-width" placeholder="ws://localhost:3000/">
+      </label>
+      <label class="small-label"><input type="checkbox" id="websocketPublishIncoming"> Incoming autodarts messages</label>
+      <label class="small-label"><input type="checkbox" id="websocketPublishOutgoing"> Outgoing autodarts messages</label>
+      <div style="margin-top:8px">
+        <button id="websocket-test" type="button">Test connection</button>
+        <button id="websocket-send-test" type="button" style="margin-left:8px">Send test message</button>
+      </div>
+      <div id="websocket-status" style="color:green;margin-top:8px;min-height:1.1em"></div>
+    </fieldset>
+    <fieldset class="panel">
+      <legend class="panel-legend"><span class="legend-title">SignalR publishing</span> <button class="help-btn" type="button" aria-expanded="false" aria-controls="help-signalr" title="What is this?">?</button></legend>
+      <div id="help-signalr" class="help-text" hidden>Send events to a SignalR hub. Provide the hub URL and the method name the server expects.</div>
+      <label class="label-block">
+        <input type="checkbox" id="signalREnabled"> Enable SignalR publishing
+      </label>
+      <label class="label-block">
+        Hub URL
+        <input type="text" id="signalRHubUrl" class="full-width" placeholder="http://localhost:5000/hub">
+      </label>
+      <label class="label-block">
+        Hub method
+        <input type="text" id="signalRMethod" class="full-width" placeholder="Publish">
+      </label>
+      <label class="small-label"><input type="checkbox" id="signalRPublishIncoming"> Incoming autodarts messages</label>
+      <label class="small-label"><input type="checkbox" id="signalRPublishOutgoing"> Outgoing autodarts messages</label>
+      <div style="margin-top:8px">
+        <button id="signalR-test" type="button">Test connection</button>
+        <button id="signalR-send-test" type="button" style="margin-left:8px">Send test message</button>
+      </div>
+      <div id="signalR-status" style="color:green;margin-top:8px;min-height:1.1em"></div>
+  </fieldset>
+    </div>
+    <fieldset class="panel">
+      <legend class="panel-legend"><span class="legend-title">Developer options</span> <button class="help-btn" type="button" aria-expanded="false" aria-controls="help-dev" title="What is this?">?</button></legend>
+      <div id="help-dev" class="help-text" hidden>Developer-only controls: console logging and verbose options to help with debugging and integration tests.</div>
+      <label class="label-block">
+        <input type="checkbox" id="logIncoming">
+        Log incoming autodarts messages (developer console)
+      </label>
+      <label class="label-block">
+        <input type="checkbox" id="logOutgoing">
+        Log outgoing autodarts messages (developer console)
+      </label>
+      <label class="label-block">
+        <input type="checkbox" id="signalRVerboseLogging">
+        Enable verbose SignalR logging (show errors)
+      </label>
+      <label class="label-block">
+        <input type="checkbox" id="websocketVerboseLogging">
+        Enable verbose WebSocket logging (show errors)
+      </label>
+      <div style="margin-top:8px">
+        <button id="show-settings" type="button">Show saved settings (console)</button>
+      </div>
+    </fieldset>
+    </div>
+  </form>
+  </div>
+
+  <div id="status" aria-live="polite"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "Autodarts Hook",
+  "version": "0.1.0",
+  "description": "Hook into the AutoDarts channel messages and forward game events to a WebSocket or SignalR (websockets).",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://play.autodarts.io/*",
+    "https://*.autodarts.io/*",
+    "https://play.ws.autodarts.io/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*",
+    "https://localhost/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://play.autodarts.io/*",
+        "https://*.autodarts.io/*",
+        "https://play.ws.autodarts.io/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://localhost/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["autodarts-capture.js"],
+      "matches": [
+        "https://play.autodarts.io/*",
+        "https://*.autodarts.io/*",
+        "https://play.ws.autodarts.io/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://localhost/*"
+      ]
+    }
+  ]
+  ,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
