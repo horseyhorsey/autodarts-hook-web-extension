@@ -5,6 +5,8 @@
 - `autodarts-capture.js` patches the `MessageEvent.prototype.data` getter and `WebSocket.prototype.send` to dispatch `autodarts-incoming` and `autodarts-outgoing` events on the `window`.
 - The content script listens for those events and logs the `event.detail` to the console.
 
+[Options Screen](./screen.jpg)
+
 ## How to load locally
 1. Open Chrome and go to `chrome://extensions`
 2. Enable "Developer mode"
